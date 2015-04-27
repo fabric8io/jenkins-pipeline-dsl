@@ -67,6 +67,10 @@ mavenJob('fabric8') {
       goals('versions:set')
       goals('-DnewVersion=${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}-${BUILD_NUMBER}')
     }
+    maven {
+      mavenInstallation('3.3.1')
+      goals('org.codehaus.mojo:versions-maven-plugin:2.2:update-property -DnewVersion=${KUBERNETES_MODEL_VERSION} property=kubernetes-model.version')
+    }
   }
   mavenInstallation('3.3.1')
   goals('clean deploy -DaltDeploymentRepository=nexus::default::${STAGING_REPO}')
