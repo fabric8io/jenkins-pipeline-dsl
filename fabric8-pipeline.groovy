@@ -63,9 +63,9 @@ mavenJob('fabric8') {
     shell('echo Using kubernetes-model ${KUBERNETES_MODEL_VERSION}')
     maven {
       mavenInstallation('3.3.1')
-      goals('build-helper:parse-version")
-      goals("versions:set")
-      goals("-DnewVersion=${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}-${BUILD_NUMBER}')")"
+      goals('build-helper:parse-version')
+      goals('versions:set')
+      goals('-DnewVersion=${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}-${BUILD_NUMBER}')
     }
   }
   mavenInstallation('3.3.1')
