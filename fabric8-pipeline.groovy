@@ -4,7 +4,7 @@ buildPipelineView('fabric8-pipeline') {
   showPipelineParameters()
 }
 
-job('origin-schema-generator') {
+mavenJob('origin-schema-generator') {
   using('base-config-build')
   scm {
     git {
@@ -20,7 +20,8 @@ job('origin-schema-generator') {
       relativeTargetDir('src/github.com/fabric8io/origin-schema-generator')
     }
   }
-  steps {
+  mavenInstallation('3.3.1')
+  preBuildSteps {
     shell('go get github.com/tools/godep')
     shell('godep go build ./cmd/generate/generate.go')
     shell('./generate | python -m json.tool > kubernetes-model/src/main/resources/schema/kube-schema.json')
@@ -28,18 +29,9 @@ job('origin-schema-generator') {
       mavenInstallation('3.3.1')
       goals('build-helper:parse-version versions:set -DnewVersion=${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}-${BUILD_NUMBER}')
     }
-    maven {
-      mavenInstallation('3.3.1')
-      goals('clean install')
-    }
   }
+  goals('clean deploy -DaltDeploymentRepository=nexus::default::${stagingRepo}')
   publishers {
-    fingerprint('kubernetes-model/target/classes/schema/kube-schema.json', true)
-    archiveArtifacts {
-      pattern('kubernetes-model/target/classes/schema/kube-schema.json')
-      latestOnly()
-    }
-
     downstreamParameterized {
       trigger('fabric8', 'SUCCESS', true) {
         currentBuild()
@@ -49,11 +41,8 @@ job('origin-schema-generator') {
   }
 }
 
-job('fabric8') {
+mavenJob('fabric8') {
   using('base-config-build')
-  parameters {
-    stringParam('KUBERNETES_MODEL_BUILD_NUMBER')
-  }
   scm {
     git {
       remote {
@@ -68,23 +57,9 @@ job('fabric8') {
       cloneTimeout(30)
     }
   }
-  steps {
+  preBuildSteps {
     shell('echo ${KUBERNETES_MODEL_BUILD_NUMBER}')
-    copyArtifacts('origin-schema-generator', '**/*') {
-      buildNumber('KUBERNETES_MODEL_BUILD_NUMBER')
-    }
-    maven {
-      mavenInstallation('3.3.1')
-      goals('clean install')
-    }
   }
-  publishers {
-    fingerprint('**/target/**/*.jar', true)
-    archiveArtifacts {
-      pattern('**/target/**/*.jar')
-      pattern('**/target/**/*.war')
-      pattern('**/target/**/*.zip')
-      latestOnly()
-    }
-  }
+  mavenInstallation('3.3.1')
+  goals('clean deploy -DaltDeploymentRepository=nexus::default::${stagingRepo}')
 }

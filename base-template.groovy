@@ -1,4 +1,4 @@
-job('base-config-build') {
+mavenJob('base-config-build') {
   wrappers {
     timestamps()
     colorizeOutput()
@@ -15,7 +15,12 @@ job('base-config-build') {
       groovy('''
     def gopath = '${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_ID}/go'
     new File(gopath + '/bin').mkdirs()
-    return [GOPATH: gopath + ':$WORKSPACE', PATH: gopath + '/bin:$PATH']
+    return [
+      GOPATH: gopath + ':$WORKSPACE',
+      PATH: gopath + '/bin:$PATH',
+      STAGING_REPO: 'http://172.17.42.1:8081/content/repositories/staging/',
+      RELEASE_REPO: 'http://172.17.42.1:8081/content/repositories/releases/'
+    ]
       ''')
     }
   }
