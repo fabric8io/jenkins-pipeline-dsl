@@ -69,7 +69,7 @@ mavenJob('fabric8') {
     }
     maven {
       mavenInstallation('3.3.1')
-      goals('org.codehaus.mojo:versions-maven-plugin:2.1:update-property -DnewVersion=${KUBERNETES_MODEL_VERSION} property=kubernetes-model.version')
+      goals('org.codehaus.mojo:versions-maven-plugin:2.1:update-property -DnewVersion=${KUBERNETES_MODEL_VERSION} -Dproperty=kubernetes-model.version')
     }
   }
   mavenInstallation('3.3.1')
