@@ -46,7 +46,7 @@ mavenJob('origin-schema-generator') {
 mavenJob('fabric8') {
   using('base-config-build')
   parameters {
-    stringParameter('KUBERNETES_MODEL_VERSION')
+    stringParam('KUBERNETES_MODEL_VERSION')
   }
   scm {
     git {
