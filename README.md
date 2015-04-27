@@ -31,7 +31,7 @@
 2. configure the Git repository to be https://github.com/fabric8io/jenkins-pipeline-dsl.git and to trigger it whenever there is a push to git
 3. Build -> Add Build Step -> Process Job DSLs 
   1. Select Look on Filesystem
-  2. Enter: <code>**/*.groovy</code> for the DSL scripts
+  2. Enter this for the DSL scripts: ```**/*.groovy```
 4. Run `seed` build & all other builds & views should be generated
 
 ## Run jobs
