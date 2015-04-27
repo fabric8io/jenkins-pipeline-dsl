@@ -27,11 +27,18 @@
 
 ## Create jobs
 
-1. Create freestyle job called `base-template` with one step `Process Job DSLs` with contents of `base-template.groovy`
-2. Create freestyle job called `pipeline-template` with one step `Process Job DSLs` with contents of `fabric8-pipeline.groovy`
-3. Run `base-template` job & all other jobs & views should be generated
+1. Create a 'seed' freestyle build
+2. configure the Git repository to be https://github.com/fabric8io/jenkins-pipeline-dsl.git and to trigger it whenever there is a push to git
+3. Build -> Add Build Step -> Process Job DSLs 
+  1. Select Look on Filesystem
+  2. USe **/*.groovy for the DSL scripts
+4. Run `seed` build & all other builds & views should be generated
 
 ## Run jobs
+
 1. Run `origin-schema-generator` build & all should follow
 
 Although it's broken right now...
+
+
+
