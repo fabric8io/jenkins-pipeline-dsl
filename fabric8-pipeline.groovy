@@ -27,7 +27,9 @@ mavenJob('origin-schema-generator') {
     shell('./generate | python -m json.tool > kubernetes-model/src/main/resources/schema/kube-schema.json')
     maven {
       mavenInstallation('3.3.1')
-      goals('build-helper:parse-version versions:set -DnewVersion=${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}-${BUILD_NUMBER}')
+      goals('build-helper:parse-version")
+      goals("versions:set")
+      goals("-DnewVersion=${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}-${BUILD_NUMBER}')")"
     }
   }
   goals('clean deploy -DaltDeploymentRepository=nexus::default::${STAGING_REPO}')
@@ -35,7 +37,7 @@ mavenJob('origin-schema-generator') {
     downstreamParameterized {
       trigger('fabric8', 'SUCCESS', true) {
         currentBuild()
-        predefinedProp('KUBERNETES_MODEL_BUILD_NUMBER', '${BUILD_NUMBER}')
+        predefinedProp('KUBERNETES_MODEL_VERSION', '${POM_VERSION}')
       }
     }
   }
@@ -58,7 +60,13 @@ mavenJob('fabric8') {
     }
   }
   preBuildSteps {
-    shell('echo ${KUBERNETES_MODEL_BUILD_NUMBER}')
+    shell('echo Using kubernetes-model ${KUBERNETES_MODEL_VERSION}')
+    maven {
+      mavenInstallation('3.3.1')
+      goals('build-helper:parse-version")
+      goals("versions:set")
+      goals("-DnewVersion=${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}-${BUILD_NUMBER}')")"
+    }
   }
   mavenInstallation('3.3.1')
   goals('clean deploy -DaltDeploymentRepository=nexus::default::${STAGING_REPO}')
