@@ -30,7 +30,7 @@ mavenJob('origin-schema-generator') {
       goals('build-helper:parse-version versions:set -DnewVersion=${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}-${BUILD_NUMBER}')
     }
   }
-  goals('clean deploy -DaltDeploymentRepository=nexus::default::${stagingRepo}')
+  goals('clean deploy -DaltDeploymentRepository=nexus::default::${STAGING_REPO}')
   publishers {
     downstreamParameterized {
       trigger('fabric8', 'SUCCESS', true) {
@@ -61,5 +61,5 @@ mavenJob('fabric8') {
     shell('echo ${KUBERNETES_MODEL_BUILD_NUMBER}')
   }
   mavenInstallation('3.3.1')
-  goals('clean deploy -DaltDeploymentRepository=nexus::default::${stagingRepo}')
+  goals('clean deploy -DaltDeploymentRepository=nexus::default::${STAGING_REPO}')
 }
