@@ -21,11 +21,15 @@ mavenJob('origin-schema-generator') {
     }
   }
   preBuildSteps {
-    shell('go get github.com/tools/godep')
-    shell('godep go build ./cmd/generate/generate.go')
-    shell('./generate | python -m json.tool > kubernetes-model/src/main/resources/schema/kube-schema.json')
+    shell('''
+      go get github.com/tools/godep')
+      cd src/github.com/fabric8io/origin-schema-generator
+      godep go build ./cmd/generate/generate.go')
+      ./generate | python -m json.tool > kubernetes-model/src/main/resources/schema/kube-schema.json
+    ''')
     maven {
       mavenInstallation('3.3.1')
+      rootPOM('src/github.com/fabric8io/origin-schema-generator/pom.xml')
       goals('build-helper:parse-version')
       goals('versions:set')
       goals('-DnewVersion=${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}-${BUILD_NUMBER}')
