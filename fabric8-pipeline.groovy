@@ -20,7 +20,6 @@ mavenJob('origin-schema-generator') {
       relativeTargetDir('src/github.com/fabric8io/origin-schema-generator')
     }
   }
-  mavenInstallation('3.3.1')
   preBuildSteps {
     shell('go get github.com/tools/godep')
     shell('godep go build ./cmd/generate/generate.go')
@@ -32,7 +31,10 @@ mavenJob('origin-schema-generator') {
       goals('-DnewVersion=${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}-${BUILD_NUMBER}')
     }
   }
-  goals('clean deploy -DaltDeploymentRepository=nexus::default::${STAGING_REPO}')
+  mavenInstallation('3.3.1')
+  localRepository(LocalRepositoryLocation.LOCAL_TO_WORKSPACE)
+  goals('clean deploy')
+  goals('-DaltDeploymentRepository=nexus::default::${STAGING_REPO}')
   publishers {
     downstreamParameterized {
       trigger('fabric8', 'SUCCESS', true) {
@@ -84,6 +86,7 @@ mavenJob('fabric8') {
     }
   }
   mavenInstallation('3.3.1')
+  localRepository(LocalRepositoryLocation.LOCAL_TO_WORKSPACE)
   goals('clean deploy')
   goals('-DaltDeploymentRepository=nexus::default::${STAGING_REPO}')
 }
