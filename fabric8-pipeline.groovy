@@ -38,7 +38,7 @@ mavenJob('origin-schema-generator') {
   mavenInstallation('3.3.1')
   localRepository(LocalRepositoryLocation.LOCAL_TO_WORKSPACE)
   rootPOM('src/github.com/fabric8io/origin-schema-generator/pom.xml')
-  goals('clean deploy')
+  goals('clean org.apache.maven.plugins:maven-deploy-plugin:2.8.2:deploy')
   goals('-DaltDeploymentRepository=nexus::default::${STAGING_REPO}')
   publishers {
     downstreamParameterized {
@@ -92,6 +92,6 @@ mavenJob('fabric8') {
   }
   mavenInstallation('3.3.1')
   localRepository(LocalRepositoryLocation.LOCAL_TO_WORKSPACE)
-  goals('clean deploy')
+  goals('clean org.apache.maven.plugins:maven-deploy-plugin:2.8.2:deploy')
   goals('-DaltDeploymentRepository=nexus::default::${STAGING_REPO}')
 }
