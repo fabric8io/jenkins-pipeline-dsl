@@ -22,9 +22,9 @@ mavenJob('origin-schema-generator') {
   }
   preBuildSteps {
     shell('''
-      go get github.com/tools/godep')
+      go get github.com/tools/godep
       cd src/github.com/fabric8io/origin-schema-generator
-      godep go build ./cmd/generate/generate.go')
+      godep go build ./cmd/generate/generate.go
       ./generate | python -m json.tool > kubernetes-model/src/main/resources/schema/kube-schema.json
     ''')
     maven {
