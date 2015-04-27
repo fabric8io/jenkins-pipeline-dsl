@@ -27,9 +27,9 @@ mavenJob('origin-schema-generator') {
     shell('./generate | python -m json.tool > kubernetes-model/src/main/resources/schema/kube-schema.json')
     maven {
       mavenInstallation('3.3.1')
-      goals('build-helper:parse-version")
-      goals("versions:set")
-      goals("-DnewVersion=${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}-${BUILD_NUMBER}')")"
+      goals('build-helper:parse-version')
+      goals('versions:set')
+      goals('-DnewVersion=${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}-${BUILD_NUMBER}')
     }
   }
   goals('clean deploy -DaltDeploymentRepository=nexus::default::${STAGING_REPO}')
