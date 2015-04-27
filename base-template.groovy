@@ -18,8 +18,8 @@ mavenJob('base-config-build') {
     return [
       GOPATH: gopath + ':$WORKSPACE',
       PATH: gopath + '/bin:$PATH',
-      STAGING_REPO: 'http://172.17.42.1:8081/content/repositories/staging/',
-      RELEASE_REPO: 'http://172.17.42.1:8081/content/repositories/releases/'
+      STAGING_REPO: 'http://${env.NEXUS_SERVICE_HOST}:${env.NEXUS_SERVICE_PORT}/content/repositories/staging/',
+      RELEASE_REPO: 'http://${env.NEXUS_SERVICE_HOST}:${env.NEXUS_SERVICE_PORT}/content/repositories/releases/'
     ]
       ''')
     }
