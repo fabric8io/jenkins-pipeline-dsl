@@ -27,9 +27,9 @@
 
 ## Create jobs
 
-1. Create `base-template` freestyle build with one step `Process Job DSLs` with contents of `base-template.groovy`
-2. Create `pipeline-template` freestyle build with one step `Process Job DSLs` with contents of `fabric8-pipeline.groovy`
-3. Run `base-template` build & all other builds & views should be generated
+1. Create freestyle job called `base-template` with one step `Process Job DSLs` with contents of `base-template.groovy`
+2. Create freestyle job called `pipeline-template` with one step `Process Job DSLs` with contents of `fabric8-pipeline.groovy`
+3. Run `base-template` job & all other jobs & views should be generated
 
 ## Run jobs
 1. Run `origin-schema-generator` build & all should follow
