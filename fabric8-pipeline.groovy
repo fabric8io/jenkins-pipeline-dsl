@@ -145,6 +145,8 @@ mavenJob('quickstarts') {
       goals('-DnewVersion=${KUBERNETES_MODEL_VERSION}')
       goals('-Dproperty=kubernetes-model.version')
     }
+    shell('find * -name pom.xml | xargs perl -pi -e "s/<fabric8.version>.+<\\/fabric8.version>/<fabric8.version>${FABRIC8_VERSION}<\\/fabric8.version>/g"')
+/*
     maven {
       mavenInstallation('3.3.1')
       goals('org.codehaus.mojo:versions-maven-plugin:2.1:update-property')
@@ -158,6 +160,7 @@ mavenJob('quickstarts') {
       goals('-DnewVersion=${FABRIC8_VERSION}')
       goals('-Dproperty=fabric8.release.version')
     }
+*/
   }
   mavenInstallation('3.3.1')
   localRepository(LocalRepositoryLocation.LOCAL_TO_WORKSPACE)
