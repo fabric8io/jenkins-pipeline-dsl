@@ -1,7 +1,11 @@
 buildPipelineView('fabric8-pipeline') {
   selectedJob('origin-schema-generator')
   title('Fabric8 Pipeline')
-  showPipelineParameters()
+  showPipelineDefinitionHeader(true)
+  showPipelineParameters(true)
+  showPipelineParametersInHeaders(true)
+  displayedBuilds(10)
+  consoleOutputLinkStyle(OutputStyle.NewWindow)
 }
 
 mavenJob('origin-schema-generator') {
