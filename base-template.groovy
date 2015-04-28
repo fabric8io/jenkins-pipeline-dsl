@@ -26,7 +26,6 @@ mavenJob('base-maven-build') {
       ''')
     }
   }
-  jdk('java8')
   mavenInstallation('3.3.1')
   localRepository(LocalRepositoryLocation.LOCAL_TO_WORKSPACE)
 }
@@ -59,5 +58,4 @@ mavenJob('base-freestyle-build') {
       ''')
     }
   }
-  jdk('java8')
 }
