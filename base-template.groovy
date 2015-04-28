@@ -30,7 +30,7 @@ mavenJob('base-maven-build') {
   localRepository(LocalRepositoryLocation.LOCAL_TO_WORKSPACE)
 }
 
-mavenJob('base-freestyle-build') {
+freeStyleJob('base-freestyle-build') {
   wrappers {
     timestamps()
     colorizeOutput()
