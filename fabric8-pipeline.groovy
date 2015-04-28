@@ -138,8 +138,8 @@ mavenJob('quickstarts') {
       goals('versions:set')
       goals('-DnewVersion=${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}-${BUILD_NUMBER}')
     }
-    shell('echo Using fabric8 ${FABRIC8_VERSION}')
     maven {
+      shell('echo Using fabric8 ${FABRIC8_VERSION}')
       mavenInstallation('3.3.1')
       goals('org.codehaus.mojo:versions-maven-plugin:2.1:update-property')
       goals('-DnewVersion=${KUBERNETES_MODEL_VERSION}')
@@ -152,13 +152,13 @@ mavenJob('quickstarts') {
       goals('-Dproperty=fabric8.version')
     }
     maven {
+      shell('echo Using fabric8 ${FABRIC8_VERSION}')
       mavenInstallation('3.3.1')
       goals('org.codehaus.mojo:versions-maven-plugin:2.1:update-property')
       goals('-DnewVersion=${FABRIC8_VERSION}')
       goals('-Dproperty=fabric8.release.version')
     }
   }
-  shell('echo Using fabric8 ${FABRIC8_VERSION}')
   mavenInstallation('3.3.1')
   localRepository(LocalRepositoryLocation.LOCAL_TO_WORKSPACE)
   goals('clean deploy')
