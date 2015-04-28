@@ -150,6 +150,12 @@ mavenJob('quickstarts') {
       goals('-DnewVersion=${FABRIC8_VERSION}')
       goals('-Dproperty=fabric8.version')
     }
+    maven {
+      mavenInstallation('3.3.1')
+      goals('org.codehaus.mojo:versions-maven-plugin:2.1:update-property')
+      goals('-DnewVersion=${FABRIC8_VERSION}')
+      goals('-Dproperty=fabric8.release.version')
+    }
   }
   mavenInstallation('3.3.1')
   localRepository(LocalRepositoryLocation.LOCAL_TO_WORKSPACE)
