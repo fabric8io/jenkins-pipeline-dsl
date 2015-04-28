@@ -87,7 +87,64 @@ mavenJob('fabric8') {
     maven {
       mavenInstallation('3.3.1')
       goals('org.codehaus.mojo:versions-maven-plugin:2.1:update-property')
-      goals('-DnewVersion=${KUBERNETES_MODEL_VERSION} -Dproperty=kubernetes-model.version')
+      goals('-DnewVersion=${KUBERNETES_MODEL_VERSION}')
+      goals('-Dproperty=kubernetes-model.version')
+    }
+  }
+  mavenInstallation('3.3.1')
+  localRepository(LocalRepositoryLocation.LOCAL_TO_WORKSPACE)
+  goals('clean deploy')
+  goals('-DaltDeploymentRepository=local-nexus::default::${STAGING_REPO}')
+  publishers {
+    downstreamParameterized {
+      trigger('quickstarts', 'UNSTABLE_OR_BETTER', true) {
+        currentBuild()
+        predefinedProp('FABRIC8_VERSION', '${POM_VERSION}')
+      }
+    }
+  }
+}
+
+mavenJob('quickstarts') {
+  using('base-config-build')
+  parameters {
+    stringParam('KUBERNETES_MODEL_VERSION')
+    stringParam('FABRIC8_VERSION')
+  }
+  scm {
+    git {
+      remote {
+        github(
+          'fabric8io/quickstarts',
+          'git'
+        )
+      }
+      branch('master')
+      clean(true)
+      createTag(false)
+      cloneTimeout(30)
+    }
+  }
+  preBuildSteps {
+    shell('echo Using kubernetes-model ${KUBERNETES_MODEL_VERSION}')
+    shell('echo Using fabric8 ${FABRIC8_VERSION}')
+    maven {
+      mavenInstallation('3.3.1')
+      goals('build-helper:parse-version')
+      goals('versions:set')
+      goals('-DnewVersion=${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}-${BUILD_NUMBER}')
+    }
+    maven {
+      mavenInstallation('3.3.1')
+      goals('org.codehaus.mojo:versions-maven-plugin:2.1:update-property')
+      goals('-DnewVersion=${KUBERNETES_MODEL_VERSION}')
+      goals('-Dproperty=kubernetes-model.version')
+    }
+    maven {
+      mavenInstallation('3.3.1')
+      goals('org.codehaus.mojo:versions-maven-plugin:2.1:update-property')
+      goals('-DnewVersion=${FABRIC8_VERSION}')
+      goals('-Dproperty=fabric8.version')
     }
   }
   mavenInstallation('3.3.1')
