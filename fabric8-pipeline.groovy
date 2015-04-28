@@ -138,7 +138,7 @@ mavenJob('quickstarts') {
       goals('versions:set')
       goals('-DnewVersion=${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}-${BUILD_NUMBER}')
     }
-    shell('echo fabric8 version is now: ${FABRIC8_VERSION}')
+    shell('echo Using fabric8 ${FABRIC8_VERSION}')
     maven {
       mavenInstallation('3.3.1')
       goals('org.codehaus.mojo:versions-maven-plugin:2.1:update-property')
@@ -158,7 +158,7 @@ mavenJob('quickstarts') {
       goals('-Dproperty=fabric8.release.version')
     }
   }
-  shell('echo fabric8 version is now: ${FABRIC8_VERSION}')
+  shell('echo Using fabric8 ${FABRIC8_VERSION}')
   mavenInstallation('3.3.1')
   localRepository(LocalRepositoryLocation.LOCAL_TO_WORKSPACE)
   goals('clean deploy')
