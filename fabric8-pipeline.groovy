@@ -88,12 +88,15 @@ mavenJob('fabric8') {
       goals('versions:set')
       goals('-DnewVersion=${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}-${BUILD_NUMBER}')
     }
+    shell('find * -name pom.xml | xargs perl -pi -e "s/<kubernetes-model.version>.+<\\/kubernetes-model.version>/<kubernetes-model.version>${KUBERNETES_MODEL_VERSION}<\\/kubernetes-model.version>/g"')
+/*
     maven {
       mavenInstallation('3.3.1')
       goals('org.codehaus.mojo:versions-maven-plugin:2.1:update-property')
       goals('-DnewVersion=${KUBERNETES_MODEL_VERSION}')
       goals('-Dproperty=kubernetes-model.version')
     }
+*/
   }
   mavenInstallation('3.3.1')
   localRepository(LocalRepositoryLocation.LOCAL_TO_WORKSPACE)
@@ -138,6 +141,10 @@ mavenJob('quickstarts') {
       goals('versions:set')
       goals('-DnewVersion=${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}-${BUILD_NUMBER}')
     }
+    shell('find * -name pom.xml | xargs perl -pi -e "s/<kubernetes-model.version>.+<\\/kubernetes-model.version>/<kubernetes-model.version>${KUBERNETES_MODEL_VERSION}<\\/kubernetes-model.version>/g"')
+    shell('find * -name pom.xml | xargs perl -pi -e "s/<fabric8.version>.+<\\/fabric8.version>/<fabric8.version>${FABRIC8_VERSION}<\\/fabric8.version>/g"')
+    shell('find * -name pom.xml | xargs perl -pi -e "s/<fabric8.release.version>.+<\\/fabric8.release.version>/<fabric8.release.version>${FABRIC8_VERSION}<\\/fabric8.release.version>/g"')
+/*
     maven {
       shell('echo Using fabric8 ${FABRIC8_VERSION}')
       mavenInstallation('3.3.1')
@@ -145,8 +152,6 @@ mavenJob('quickstarts') {
       goals('-DnewVersion=${KUBERNETES_MODEL_VERSION}')
       goals('-Dproperty=kubernetes-model.version')
     }
-    shell('find * -name pom.xml | xargs perl -pi -e "s/<fabric8.version>.+<\\/fabric8.version>/<fabric8.version>${FABRIC8_VERSION}<\\/fabric8.version>/g"')
-/*
     maven {
       mavenInstallation('3.3.1')
       goals('org.codehaus.mojo:versions-maven-plugin:2.1:update-property')
