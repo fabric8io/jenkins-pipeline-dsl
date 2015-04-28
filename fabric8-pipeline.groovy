@@ -9,7 +9,7 @@ buildPipelineView('fabric8-pipeline') {
 }
 
 mavenJob('origin-schema-generator') {
-  using('base-config-build')
+  using('base-maven-build')
   scm {
     git {
       remote {
@@ -39,8 +39,6 @@ mavenJob('origin-schema-generator') {
       goals('-DnewVersion=${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}-${BUILD_NUMBER}')
     }
   }
-  mavenInstallation('3.3.1')
-  localRepository(LocalRepositoryLocation.LOCAL_TO_WORKSPACE)
   rootPOM('src/github.com/fabric8io/origin-schema-generator/pom.xml')
   goals('clean deploy')
   goals('-DaltDeploymentRepository=local-nexus::default::${STAGING_REPO}')
@@ -55,7 +53,7 @@ mavenJob('origin-schema-generator') {
 }
 
 mavenJob('fabric8') {
-  using('base-config-build')
+  using('base-maven-build')
   parameters {
     stringParam('KUBERNETES_MODEL_VERSION')
   }
@@ -89,17 +87,7 @@ mavenJob('fabric8') {
       goals('-DnewVersion=${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}-${BUILD_NUMBER}')
     }
     shell('find * -name pom.xml | xargs perl -pi -e "s/<kubernetes-model.version>.+<\\/kubernetes-model.version>/<kubernetes-model.version>${KUBERNETES_MODEL_VERSION}<\\/kubernetes-model.version>/g"')
-/*
-    maven {
-      mavenInstallation('3.3.1')
-      goals('org.codehaus.mojo:versions-maven-plugin:2.1:update-property')
-      goals('-DnewVersion=${KUBERNETES_MODEL_VERSION}')
-      goals('-Dproperty=kubernetes-model.version')
-    }
-*/
   }
-  mavenInstallation('3.3.1')
-  localRepository(LocalRepositoryLocation.LOCAL_TO_WORKSPACE)
   goals('clean deploy')
   goals('-DaltDeploymentRepository=local-nexus::default::${STAGING_REPO}')
   publishers {
@@ -113,7 +101,7 @@ mavenJob('fabric8') {
 }
 
 mavenJob('quickstarts') {
-  using('base-config-build')
+  using('base-maven-build')
   parameters {
     stringParam('KUBERNETES_MODEL_VERSION')
     stringParam('FABRIC8_VERSION')
@@ -144,31 +132,29 @@ mavenJob('quickstarts') {
     shell('find * -name pom.xml | xargs perl -pi -e "s/<kubernetes-model.version>.+<\\/kubernetes-model.version>/<kubernetes-model.version>${KUBERNETES_MODEL_VERSION}<\\/kubernetes-model.version>/g"')
     shell('find * -name pom.xml | xargs perl -pi -e "s/<fabric8.version>.+<\\/fabric8.version>/<fabric8.version>${FABRIC8_VERSION}<\\/fabric8.version>/g"')
     shell('find * -name pom.xml | xargs perl -pi -e "s/<fabric8.release.version>.+<\\/fabric8.release.version>/<fabric8.release.version>${FABRIC8_VERSION}<\\/fabric8.release.version>/g"')
-/*
-    maven {
-      shell('echo Using fabric8 ${FABRIC8_VERSION}')
-      mavenInstallation('3.3.1')
-      goals('org.codehaus.mojo:versions-maven-plugin:2.1:update-property')
-      goals('-DnewVersion=${KUBERNETES_MODEL_VERSION}')
-      goals('-Dproperty=kubernetes-model.version')
-    }
-    maven {
-      mavenInstallation('3.3.1')
-      goals('org.codehaus.mojo:versions-maven-plugin:2.1:update-property')
-      goals('-DnewVersion=${FABRIC8_VERSION}')
-      goals('-Dproperty=fabric8.version')
-    }
-    maven {
-      shell('echo Using fabric8 ${FABRIC8_VERSION}')
-      mavenInstallation('3.3.1')
-      goals('org.codehaus.mojo:versions-maven-plugin:2.1:update-property')
-      goals('-DnewVersion=${FABRIC8_VERSION}')
-      goals('-Dproperty=fabric8.release.version')
-    }
-*/
   }
-  mavenInstallation('3.3.1')
-  localRepository(LocalRepositoryLocation.LOCAL_TO_WORKSPACE)
   goals('clean deploy')
   goals('-DaltDeploymentRepository=local-nexus::default::${STAGING_REPO}')
+}
+
+freeStyleJob('fabric8-deploy') {
+  using('base-freestyle-build')
+  steps {
+    copyArtifacts('origin-schema-generator') {
+      upstreamBuild(true)
+    }
+    copyArtifacts('fabric8') {
+      upstreamBuild(true)
+    }
+    copyArtifacts('quickstarts') {
+      upstreamBuild(true)
+    }
+  }
+  publishers {
+    downstreamParameterized {
+      trigger('quickstarts', 'UNSTABLE_OR_WORSE', true) {
+        currentBuild()
+      }
+    }
+  }
 }
