@@ -135,26 +135,26 @@ mavenJob('quickstarts') {
   }
   goals('clean deploy')
   goals('-DaltDeploymentRepository=local-nexus::default::${STAGING_REPO}')
+  publishers {
+    downstreamParameterized {
+      trigger('fabric8-deploy', 'UNSTABLE_OR_WORSE', true) {
+        currentBuild()
+      }
+    }
+  }
 }
 
 freeStyleJob('fabric8-deploy') {
   using('base-freestyle-build')
   steps {
-    copyArtifacts('origin-schema-generator') {
+    copyArtifacts('origin-schema-generator', '**/*') {
       upstreamBuild(true)
     }
-    copyArtifacts('fabric8') {
+    copyArtifacts('fabric8', '**/*') {
       upstreamBuild(true)
     }
-    copyArtifacts('quickstarts') {
+    copyArtifacts('quickstarts', '**/*') {
       upstreamBuild(true)
-    }
-  }
-  publishers {
-    downstreamParameterized {
-      trigger('quickstarts', 'UNSTABLE_OR_WORSE', true) {
-        currentBuild()
-      }
     }
   }
 }
