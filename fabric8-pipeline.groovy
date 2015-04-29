@@ -149,7 +149,14 @@ mavenJob('quickstarts') {
 
 freeStyleJob('fabric8-deploy') {
   using('base-freestyle-build')
+  wrappers {
+    credentialsBinding {
+      file('SIGNING_KEY_FILE', 'fusesource-gpg-signing-key')
+      string('SIGNING_KEY_PASSPHRASE', 'fusesource-gpg-signing-key-passphrase')
+    }
+  }
   steps {
+    shell('rm -rf *')
     copyArtifacts('origin-schema-generator', '**/*') {
       upstreamBuild(true)
     }
@@ -159,5 +166,12 @@ freeStyleJob('fabric8-deploy') {
     copyArtifacts('quickstarts', '**/*') {
       upstreamBuild(true)
     }
+    shell('''
+      KEY_ID=$(gpg --import ${SIGNING_KEY_FILE} 2>&1|head -1|grep -Eo '([A-F0-8]{8})')
+      for i in $(find . -type d -print \;)
+      do
+        gpg --passphrase ${SIGNING_KEY_PASSPHRASE} -ab -o ${i}.asc -u ${KEY_ID} --sign ${i}
+      done
+    ''')
   }
 }
