@@ -2,6 +2,7 @@ mavenJob('base-maven-build') {
   wrappers {
     timestamps()
     colorizeOutput()
+    maskPasswords()
     golang('1.4.2')
     timeout {
       elastic(
@@ -40,6 +41,7 @@ freeStyleJob('base-freestyle-build') {
   wrappers {
     timestamps()
     colorizeOutput()
+    maskPasswords()
     golang('1.4.2')
     timeout {
       elastic(
