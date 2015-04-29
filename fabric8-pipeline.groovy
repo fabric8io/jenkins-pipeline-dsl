@@ -42,6 +42,7 @@ mavenJob('origin-schema-generator') {
   rootPOM('src/github.com/fabric8io/origin-schema-generator/pom.xml')
   goals('clean deploy')
   goals('-DaltDeploymentRepository=local-nexus::default::${STAGING_REPO}')
+  goals('-Prelease')
   publishers {
     downstreamParameterized {
       trigger('fabric8', 'SUCCESS', true) {
