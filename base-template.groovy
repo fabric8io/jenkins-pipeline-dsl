@@ -26,8 +26,8 @@ mavenJob('base-maven-build') {
     return [
       GOPATH: gopath + ':$WORKSPACE',
       PATH: gopath + '/bin:$PATH',
-      STAGING_REPO: 'http:///${env.NEXUS_SERVICE_HOST}/content/repositories/staging/',
-      RELEASE_REPO: 'http:///${env.NEXUS_SERVICE_HOST}/content/repositories/releases/\'
+      STAGING_REPO: 'http://${env.NEXUS_SERVICE_HOST}/content/repositories/staging/',
+      RELEASE_REPO: 'http://${env.NEXUS_SERVICE_HOST}/content/repositories/releases/\'
     ]
       ''')
     }
