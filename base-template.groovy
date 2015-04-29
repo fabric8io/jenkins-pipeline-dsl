@@ -14,14 +14,20 @@ mavenJob('base-maven-build') {
     environmentVariables {
       // TODO Note that staging repos are only available in Nexus professional so lets use the same repo for now
       // STAGING_REPO: 'http://${env.NEXUS_SERVICE_HOST}:${env.NEXUS_SERVICE_PORT}/content/repositories/staging/',
+      /*
+      the DNS version:
+
+      STAGING_REPO: 'http://nexus/content/repositories/staging/',
+      RELEASE_REPO: 'http://nexus/content/repositories/releases/'
+      */
       groovy('''
     def gopath = '${JENKINS_HOME}/jobs/${JOB_NAME}/builds/${BUILD_ID}/go'
     new File(gopath + '/bin').mkdirs()
     return [
       GOPATH: gopath + ':$WORKSPACE',
       PATH: gopath + '/bin:$PATH',
-      STAGING_REPO: 'http://nexus/content/repositories/staging/',
-      RELEASE_REPO: 'http://nexus/content/repositories/releases/'
+      STAGING_REPO: 'http:///${env.NEXUS_SERVICE_HOST}/content/repositories/staging/',
+      RELEASE_REPO: 'http:///${env.NEXUS_SERVICE_HOST}/content/repositories/releases/\'
     ]
       ''')
     }
