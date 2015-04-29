@@ -136,7 +136,7 @@ mavenJob('quickstarts') {
   }
   goals('clean deploy')
   goals('-DaltDeploymentRepository=local-nexus::default::${STAGING_REPO}')
-  goals('-Ddocker.registryPrefix=registry.os1.fabric8.io')
+  goals('-Ddocker.registryPrefix=registry.os1.fabric8.io/')
   goals('-Pjube,docker-push')
   publishers {
     downstreamParameterized {
