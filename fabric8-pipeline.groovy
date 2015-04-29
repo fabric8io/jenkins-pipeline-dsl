@@ -170,7 +170,7 @@ freeStyleJob('fabric8-deploy') {
       KEY_ID=$(gpg --import ${SIGNING_KEY_FILE} 2>&1|head -1|grep -Eo '([A-F0-8]{8})')
       for i in $(find . -type d -print)
       do
-        gpg --passphrase ${SIGNING_KEY_PASSPHRASE} -ab -o ${i}.asc -u ${KEY_ID} --sign ${i}
+        gpg --no-tty --batch --passphrase ${SIGNING_KEY_PASSPHRASE} -ab -o ${i}.asc -u ${KEY_ID} --sign ${i}
       done
     ''')
   }
