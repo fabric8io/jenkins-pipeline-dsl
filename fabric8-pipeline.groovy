@@ -151,7 +151,7 @@ mavenJob('quickstarts') {
   goals('-settings /var/jenkins_home/.m2/settings.xml')
   // TODO can't push yet until we figure out authentication on the local registry...
   // goals('-Pjube,docker-push')
-  goals('-Pjube,docker-build')
+  goals('-Pcanary,jube,docker-build')
   publishers {
     downstreamParameterized {
       trigger('fabric8-deploy', 'UNSTABLE_OR_WORSE', true) {
