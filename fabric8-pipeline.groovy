@@ -103,6 +103,14 @@ mavenJob('fabric8') {
 
 mavenJob('quickstarts') {
   using('base-maven-build')
+  timeout {
+    elastic(
+      400, // Build will timeout when it take 3 time longer than the reference build duration, default = 150
+      3,   // Number of builds to consider for average calculation
+      120   // 120 minutes default timeout (no successful builds available as reference)
+    )
+    failBuild()
+  }
   parameters {
     stringParam('KUBERNETES_MODEL_VERSION')
     stringParam('FABRIC8_VERSION')
