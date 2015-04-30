@@ -137,7 +137,9 @@ mavenJob('quickstarts') {
   goals('clean deploy')
   goals('-DaltDeploymentRepository=local-nexus::default::${STAGING_REPO}')
   goals('-Ddocker.registryPrefix=registry.os1.fabric8.io/')
-  goals('-Pjube,docker-push')
+  // TODO can't push yet until we figure out authentication on the local registry...
+  // goals('-Pjube,docker-push')
+  goals('-Pjube,docker-build')
   publishers {
     downstreamParameterized {
       trigger('fabric8-deploy', 'UNSTABLE_OR_WORSE', true) {
