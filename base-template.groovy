@@ -6,9 +6,9 @@ mavenJob('base-maven-build') {
     golang('1.4.2')
     timeout {
       elastic(
-        150, // Build will timeout when it take 3 time longer than the reference build duration, default = 150
-        3,   // Number of builds to consider for average calculation
-        30   // 30 minutes default timeout (no successful builds available as reference)
+        450, // Build will timeout when it take 3 time longer than the reference build duration, default = 150
+        5,   // Number of builds to consider for average calculation
+        120   // 30 minutes default timeout (no successful builds available as reference)
       )
       failBuild()
     }
