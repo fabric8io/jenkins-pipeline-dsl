@@ -152,6 +152,18 @@ mavenJob('quickstarts') {
   // TODO can't push yet until we figure out authentication on the local registry...
   // goals('-Pjube,docker-push')
   goals('-Pcanary,jube,docker-build')
+
+  // lets deploy to the itest namespace
+  postBuildSteps {
+    maven {
+      mavenInstallation('3.3.1')
+      rootPOM("app-groups/kitchen-sink/pom.xml")
+      goals('io.fabric8:fabric8-maven-plugin:${FABRIC8_VERSION}:apply')
+      goals('-Dfabric8.apply.recreate=true')
+      goals('-Dfabric8.apply.domain=itest.os1.fabric8.io')
+      goals('-Dfabric8.apply.namespace=itest')
+    }
+  }
   publishers {
     downstreamParameterized {
       trigger('fabric8-deploy', 'UNSTABLE_OR_WORSE', true) {
