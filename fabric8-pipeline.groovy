@@ -8,6 +8,16 @@ buildPipelineView('fabric8-pipeline') {
   consoleOutputLinkStyle(OutputStyle.NewWindow)
 }
 
+buildMonitorView('fabric8 CD') {
+ description('All jobs for the fabric8 CD pipeline')
+ jobs {
+     name('origin-schema-generator')
+     name('fabric8')
+     name('quickstarts')
+     name('fabric8-deploy')
+ }
+}
+
 mavenJob('origin-schema-generator') {
   using('base-maven-build')
   scm {
@@ -44,6 +54,11 @@ mavenJob('origin-schema-generator') {
   goals('-DaltDeploymentRepository=local-nexus::default::${STAGING_REPO}')
   goals('-Prelease')
   publishers {
+    retryBuild {
+        rerunIfUnstable()
+        retryLimit(3)
+        progressiveDelay(60, 600)
+    }
     downstreamParameterized {
       trigger('fabric8', 'SUCCESS', true) {
         currentBuild()
