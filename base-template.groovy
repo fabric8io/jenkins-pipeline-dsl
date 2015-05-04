@@ -35,12 +35,6 @@ mavenJob('base-maven-build') {
   }
   mavenInstallation('3.3.1')
   localRepository(LocalRepositoryLocation.LOCAL_TO_WORKSPACE)
-
-  retryBuild {
-    rerunIfUnstable()
-    retryLimit(3)
-    progressiveDelay(60, 600)
-  }
 }
 
 freeStyleJob('base-freestyle-build') {

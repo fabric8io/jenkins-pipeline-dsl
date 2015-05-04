@@ -108,6 +108,11 @@ mavenJob('fabric8') {
   goals('-DaltDeploymentRepository=local-nexus::default::${STAGING_REPO}')
   publishers {
     downstreamParameterized {
+      retryBuild {
+          rerunIfUnstable()
+          retryLimit(3)
+          progressiveDelay(60, 600)
+      }
       trigger('quickstarts', 'UNSTABLE_OR_BETTER', true) {
         currentBuild()
         predefinedProp('FABRIC8_VERSION', '${POM_VERSION}')
@@ -180,6 +185,11 @@ mavenJob('quickstarts') {
     }
   }
   publishers {
+    retryBuild {
+        rerunIfUnstable()
+        retryLimit(3)
+        progressiveDelay(60, 600)
+    }
     downstreamParameterized {
       trigger('fabric8-deploy', 'UNSTABLE_OR_WORSE', true) {
         currentBuild()
