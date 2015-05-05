@@ -72,7 +72,9 @@ mavenJob('fabric8') {
     git {
       remote {
         github(
-          'fabric8io/fabric8',
+          // TODO
+          //'fabric8io/fabric8',
+          'jimmidyson/fabric8',
           'git'
         )
       }
@@ -131,7 +133,9 @@ mavenJob('quickstarts') {
     git {
       remote {
         github(
-          'fabric8io/quickstarts',
+          // TODO
+          // 'fabric8io/quickstarts',
+          'jstrachan/quickstarts',
           'git'
         )
       }
