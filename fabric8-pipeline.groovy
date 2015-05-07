@@ -13,7 +13,7 @@ buildMonitorView('fabric8 CD') {
  jobs {
      name('origin-schema-generator')
      name('fabric8')
-     name('quickstarts')
+     name('quickstarts-quickstarts')
      name('fabric8-deploy')
  }
 }
@@ -103,7 +103,7 @@ mavenJob('fabric8') {
   goals('-DaltDeploymentRepository=local-nexus::default::${STAGING_REPO}')
   publishers {
     downstreamParameterized {
-      trigger('quickstarts', 'UNSTABLE_OR_BETTER', true) {
+      trigger('fabric8-apps', 'UNSTABLE_OR_BETTER', true) {
         currentBuild()
         predefinedProp('FABRIC8_VERSION', '${POM_VERSION}')
       }
@@ -111,7 +111,7 @@ mavenJob('fabric8') {
   }
 }
 
-mavenJob('quickstarts') {
+mavenJob('fabric8-apps') {
   using('base-maven-build')
   wrappers {
     timeout {
@@ -161,7 +161,7 @@ mavenJob('quickstarts') {
   goals('-settings /var/jenkins_home/.m2/settings.xml')
   // TODO can't push yet until we figure out authentication on the local registry...
   // goals('-Pjube,docker-push')
-  goals('-Pcanary,jube,docker-build')
+  goals('-Pcanary,apps,jube,docker-build')
 
   // lets deploy to the itest namespace
   postBuildSteps {
@@ -174,6 +174,60 @@ mavenJob('quickstarts') {
       goals('-Dfabric8.apply.namespace=itest')
     }
   }
+  publishers {
+    downstreamParameterized {
+      trigger('fabric8-quickstarts', 'UNSTABLE_OR_WORSE', true) {
+        currentBuild()
+      }
+    }
+  }
+}
+
+
+mavenJob('fabric8-quickstarts') {
+  using('base-maven-build')
+  wrappers {
+    timeout {
+      elastic(
+              400, // Build will timeout when it take 3 time longer than the reference build duration, default = 150
+              5,   // Number of builds to consider for average calculation
+              120   // 120 minutes default timeout (no successful builds available as reference)
+      )
+      failBuild()
+    }
+  }
+  parameters {
+    stringParam('KUBERNETES_MODEL_VERSION')
+    stringParam('FABRIC8_VERSION')
+  }
+  scm {
+    git {
+      remote {
+        github(
+          'fabric8io/quickstarts',
+          'git'
+        )
+      }
+      branch('master')
+      clean(true)
+      createTag(false)
+      cloneTimeout(30)
+    }
+  }
+  preBuildSteps {
+    shell('echo Using kubernetes-model ${KUBERNETES_MODEL_VERSION}')
+    shell('echo Using fabric8 ${FABRIC8_VERSION}')
+  }
+  goals('clean deploy')
+  goals('-DaltDeploymentRepository=local-nexus::default::${STAGING_REPO}')
+  goals('-Ddocker.registryPrefix=registry.os1.fabric8.io/')
+  // This works around this bug of the settings not being found by the furnace maven plugin: https://issues.jboss.org/browse/FURNACE-45
+  goals('-settings /var/jenkins_home/.m2/settings.xml')
+  // TODO can't push yet until we figure out authentication on the local registry...
+  // goals('-Pjube,docker-push')
+  goals('-Pcanary,quickstarts,jube,docker-build')
+
+  // lets deploy to the itest namespace
   publishers {
     downstreamParameterized {
       trigger('fabric8-deploy', 'UNSTABLE_OR_WORSE', true) {
@@ -199,7 +253,10 @@ freeStyleJob('fabric8-deploy') {
     copyArtifacts('fabric8', '**/*') {
       upstreamBuild(true)
     }
-    copyArtifacts('quickstarts', '**/*') {
+    copyArtifacts('fabric8-apps', '**/*') {
+      upstreamBuild(true)
+    }
+    copyArtifacts('fabric8-quickstarts', '**/*') {
       upstreamBuild(true)
     }
     shell('''
