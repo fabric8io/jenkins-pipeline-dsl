@@ -156,8 +156,9 @@ mavenJob('fabric8-apps') {
     }
   }
   goals('clean deploy --batch-mode')
+  goals('-Dfabric8.deployFileGoal=deploy')
+  goals('-Dfabric8.deployFileUrl=${STAGING_REPO}')
   goals('-DaltDeploymentRepository=local-nexus::default::${STAGING_REPO}')
-  goals('-Ddocker.registryPrefix=registry.os1.fabric8.io/')
   // This works around this bug of the settings not being found by the furnace maven plugin: https://issues.jboss.org/browse/FURNACE-45
   goals('-settings /var/jenkins_home/.m2/settings.xml')
   // TODO can't push yet until we figure out authentication on the local registry...
