@@ -51,7 +51,7 @@ mavenJob('origin-schema-generator') {
     }
   }
   rootPOM('src/github.com/fabric8io/origin-schema-generator/pom.xml')
-  goals('clean deploy')
+  goals('clean deploy --batch-mode')
   goals('-DaltDeploymentRepository=local-nexus::default::${STAGING_REPO}')
   goals('-Prelease')
   publishers {
@@ -100,7 +100,7 @@ mavenJob('fabric8') {
     }
     shell('find * -name pom.xml | xargs perl -pi -e "s/<kubernetes-model.version>.+<\\/kubernetes-model.version>/<kubernetes-model.version>${KUBERNETES_MODEL_VERSION}<\\/kubernetes-model.version>/g"')
   }
-  goals('clean deploy')
+  goals('clean deploy --batch-mode')
   goals('-DaltDeploymentRepository=local-nexus::default::${STAGING_REPO}')
   publishers {
     downstreamParameterized {
@@ -155,7 +155,7 @@ mavenJob('fabric8-apps') {
       goals('-DnewVersion=${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}-${BUILD_NUMBER}')
     }
   }
-  goals('clean deploy')
+  goals('clean deploy --batch-mode')
   goals('-DaltDeploymentRepository=local-nexus::default::${STAGING_REPO}')
   goals('-Ddocker.registryPrefix=registry.os1.fabric8.io/')
   // This works around this bug of the settings not being found by the furnace maven plugin: https://issues.jboss.org/browse/FURNACE-45
@@ -228,7 +228,7 @@ mavenJob('fabric8-quickstarts') {
       goals('-DnewVersion=${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}-${BUILD_NUMBER}')
     }
   }
-  goals('clean deploy')
+  goals('clean deploy --batch-mode')
   goals('-DaltDeploymentRepository=local-nexus::default::${STAGING_REPO}')
   goals('-Ddocker.registryPrefix=registry.os1.fabric8.io/')
   // This works around this bug of the settings not being found by the furnace maven plugin: https://issues.jboss.org/browse/FURNACE-45
