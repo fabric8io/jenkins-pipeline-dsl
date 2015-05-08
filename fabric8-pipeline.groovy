@@ -44,6 +44,7 @@ mavenJob('origin-schema-generator') {
     ''')
     maven {
       mavenInstallation('3.3.1')
+      mavenOpts("-B")
       rootPOM('src/github.com/fabric8io/origin-schema-generator/pom.xml')
       goals('build-helper:parse-version')
       goals('versions:set')
@@ -87,12 +88,14 @@ mavenJob('fabric8') {
     shell('echo Using kubernetes-model ${KUBERNETES_MODEL_VERSION}')
     maven {
       mavenInstallation('3.3.1')
+      mavenOpts("-B")
       goals('build-helper:parse-version')
       goals('versions:set')
       goals('-DnewVersion=${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}-${BUILD_NUMBER}')
     }
     maven {
       mavenInstallation('3.3.1')
+      mavenOpts("-B")
       rootPOM('bom/pom.xml')
       goals('build-helper:parse-version')
       goals('versions:set')
@@ -150,6 +153,7 @@ mavenJob('fabric8-apps') {
     shell('find * -name pom.xml | xargs perl -pi -e "s/<fabric8.release.version>.+<\\/fabric8.release.version>/<fabric8.release.version>${FABRIC8_VERSION}<\\/fabric8.release.version>/g"')
     maven {
       mavenInstallation('3.3.1')
+      mavenOpts("-B")
       goals('build-helper:parse-version')
       goals('versions:set')
       goals('-DnewVersion=${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}-${BUILD_NUMBER}')
@@ -169,6 +173,7 @@ mavenJob('fabric8-apps') {
   postBuildSteps {
     maven {
       mavenInstallation('3.3.1')
+      mavenOpts("-B")
       rootPOM("app-groups/kitchen-sink/pom.xml")
       goals('io.fabric8:fabric8-maven-plugin:${FABRIC8_VERSION}:apply')
       goals('-Dfabric8.apply.recreate=true')
@@ -224,6 +229,7 @@ mavenJob('fabric8-quickstarts') {
     shell('find * -name pom.xml | xargs perl -pi -e "s/<fabric8.release.version>.+<\\/fabric8.release.version>/<fabric8.release.version>${FABRIC8_VERSION}<\\/fabric8.release.version>/g"')
     maven {
       mavenInstallation('3.3.1')
+      mavenOpts("-B")
       goals('build-helper:parse-version')
       goals('versions:set')
       goals('-DnewVersion=${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion}-${BUILD_NUMBER}')
