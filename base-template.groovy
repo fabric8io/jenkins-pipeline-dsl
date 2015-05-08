@@ -35,6 +35,7 @@ mavenJob('base-maven-build') {
   }
   mavenInstallation('3.3.1')
   localRepository(LocalRepositoryLocation.LOCAL_TO_WORKSPACE)
+  mavenOpts("-B")
 }
 
 freeStyleJob('base-freestyle-build') {
