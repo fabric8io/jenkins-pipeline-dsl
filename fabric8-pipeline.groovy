@@ -160,7 +160,7 @@ mavenJob('fabric8-apps') {
     }
   }
   goals('clean deploy')
-  goals('-Dfabric8.deployFileGoal=deploy')
+  goals('-Dfabric8.deployFileGoal="deploy -DgeneratePom=false"')
   goals('-Dfabric8.deployFileUrl=${STAGING_REPO}')
   goals('-DaltDeploymentRepository=local-nexus::default::${STAGING_REPO}')
   // This works around this bug of the settings not being found by the furnace maven plugin: https://issues.jboss.org/browse/FURNACE-45
