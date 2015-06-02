@@ -176,9 +176,9 @@ mavenJob('fabric8-apps') {
       runHeadless(true)
       rootPOM("app-groups/kitchen-sink/pom.xml")
       goals('io.fabric8:fabric8-maven-plugin:${FABRIC8_VERSION}:apply')
-      goals('-Dfabric8.apply.recreate=true')
-      goals('-Dfabric8.apply.domain=itest.os1.fabric8.io')
-      goals('-Dfabric8.apply.namespace=itest')
+      goals('-Dfabric8.recreate=true')
+      goals('-Dfabric8.namespace=cd-itest')
+      goals('-Dfabric8.apply.DOMAIN=itest.cd.fabric8.io')
     }
   }
   publishers {
@@ -237,7 +237,7 @@ mavenJob('fabric8-quickstarts') {
   }
   goals('clean deploy')
   goals('-DaltDeploymentRepository=local-nexus::default::${STAGING_REPO}')
-  goals('-Ddocker.registryPrefix=registry.os1.fabric8.io/')
+  goals('-Ddocker.registryPrefix=registry.cd.fabric8.io/')
   // This works around this bug of the settings not being found by the furnace maven plugin: https://issues.jboss.org/browse/FURNACE-45
   goals('-settings /var/jenkins_home/.m2/settings.xml')
   // TODO can't push yet until we figure out authentication on the local registry...
