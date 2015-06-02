@@ -180,8 +180,8 @@ mavenJob('fabric8-apps') {
       goals('io.fabric8:fabric8-maven-plugin:${FABRIC8_VERSION}:apply')
       goals('-Dfabric8.recreate=true')
       goals('-Dfabric8.namespace=cd-itest')
+      goals('-Dfabric8.domain=itest.cd.fabric8.io')
       goals('-Dfabric8.apply.DOMAIN=itest.cd.fabric8.io')
-      goals('-Dfabric8.apply.routeDomain=itest.cd.fabric8.io')
     }
   }
   publishers {
