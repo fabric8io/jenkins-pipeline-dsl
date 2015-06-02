@@ -178,6 +178,7 @@ mavenJob('fabric8-apps') {
       goals('io.fabric8:fabric8-maven-plugin:${FABRIC8_VERSION}:apply')
       goals('-Dfabric8.recreate=true')
       goals('-Dfabric8.namespace=cd-itest')
+      goals('-Dfabric8.useDeploymentConfig=true')
       goals('-Dfabric8.apply.DOMAIN=itest.cd.fabric8.io')
     }
   }
