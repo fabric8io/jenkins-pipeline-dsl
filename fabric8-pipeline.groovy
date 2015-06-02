@@ -161,7 +161,7 @@ mavenJob('fabric8-apps') {
   }
   goals('clean deploy')
   // lets enable the use of deployment configs
-  goals('-Dfabric8.useDeploymentConfig=true')
+  //goals('-Dfabric8.useDeploymentConfig=true')
   goals('-Dfabric8.deployFileGoal="deploy -DgeneratePom=false"')
   goals('-Dfabric8.deployFileUrl=${STAGING_REPO}')
   goals('-DaltDeploymentRepository=local-nexus::default::${STAGING_REPO}')
