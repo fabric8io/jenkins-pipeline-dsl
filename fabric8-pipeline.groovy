@@ -160,6 +160,8 @@ mavenJob('fabric8-apps') {
     }
   }
   goals('clean deploy')
+  // lets enable the use of deployment configs
+  goals('-Dfabric8.useDeploymentConfig=true')
   goals('-Dfabric8.deployFileGoal="deploy -DgeneratePom=false"')
   goals('-Dfabric8.deployFileUrl=${STAGING_REPO}')
   goals('-DaltDeploymentRepository=local-nexus::default::${STAGING_REPO}')
@@ -178,7 +180,6 @@ mavenJob('fabric8-apps') {
       goals('io.fabric8:fabric8-maven-plugin:${FABRIC8_VERSION}:apply')
       goals('-Dfabric8.recreate=true')
       goals('-Dfabric8.namespace=cd-itest')
-      goals('-Dfabric8.useDeploymentConfig=true')
       goals('-Dfabric8.apply.DOMAIN=itest.cd.fabric8.io')
       goals('-Dfabric8.apply.routeDomain=itest.cd.fabric8.io')
     }
