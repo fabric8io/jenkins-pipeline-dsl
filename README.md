@@ -1,5 +1,9 @@
 # Fabric8 pipeline DSL for continuous delivery
 
+You can just use the [fabric8/jenkins](https://registry.hub.docker.com/u/fabric8/jenkins/) docker image which has everything setup and configured for you!
+
+Otherwise if you wish to run your own jenkins then try:
+
 ## Required Jenkins plugins
 
 * Build Pipeline Plugin
@@ -37,8 +41,6 @@
 ## Run jobs
 
 1. Run `origin-schema-generator` build & all should follow
-
-Although it's broken right now...
 
 
 
