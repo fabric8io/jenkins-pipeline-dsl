@@ -176,7 +176,9 @@ mavenJob('fabric8-apps') {
     maven {
       mavenInstallation('3.3.1')
       runHeadless(true)
-      rootPOM("app-groups/kitchen-sink/pom.xml")
+      // TODO for now lets focus on a smaller set...
+      //rootPOM("app-groups/kitchen-sink/pom.xml")
+      rootPOM("app-groups/cdelivery/pom.xml")
       goals('io.fabric8:fabric8-maven-plugin:${FABRIC8_VERSION}:apply')
       goals('-Dfabric8.recreate=true')
       goals('-Dfabric8.namespace=cd-itest')
